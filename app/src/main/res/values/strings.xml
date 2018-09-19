@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">MDP</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Exploration</string>
+    <string name="bluetooth_open">Bluetooth</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="show_md5_label">MD5</string>
+    <string name="initial_clock">00:00</string>
+    <string name="robot_initial_status">== Robot Ready ==</string>
+
+    <string name="exploration_stop">Robot Returning To Start&#8230;</string>
+    <string name="exploration_started">Exploration Started</string>
+    <string name="fastest_started">Fastest Run Started</string>
+    <string name="to_exploration_mode">Switched to Exploration</string>
+    <string name="to_fastest_mode">Switched to Fastest</string>
+    <string name="not_connected">Not Connected</string>
+    <string name="coordinate_reset">Robot Coordinate Reset</string>
+
+    <string name="hit_north_wall">Hit Wall: North</string>
+    <string name="hit_south_wall">Hit Wall: South</string>
+    <string name="hit_east_wall">Hit Wall: East</string>
+    <string name="hit_west_wall">Hit Wall: West</string>
+
+    <string name="drawer_open">Drawer Opened</string>
+    <string name="drawer_close">Drawer Closed</string>
+
+    <string name="x_label">X</string>
+    <string name="y_label">Y</string>
+    <string name="height_hint">0&#8211;17</string>
+    <string name="width_hint">0&#8211;12</string>
+    <string name="initiate_interactive_control">Explore</string>
+
+    <string name="robot_reset_title">Bring Robot to Start Zone?</string>
+    <string name="obstacles_reset_title">Clear all obstacles?</string>
+    <string name="confirm_text">Confirm</string>
+    <string name="cancel_text">Cancel</string>
+
+
+    <string name="invalid_coordinate">Coordinates must be an INTEGER</string>
+    <string name="backward_warning">Cannot Move Backward</string>
+
+    <string name="refresh_text">Refreshing&#8230;</string>
+
+    <string name="mode_switch_warning">Please stop the robot before switching mode!</string>
+
+
+    <string name="configurable_button_1">Button 1</string>
+    <string name="configurable_button_2">Button 2</string>
+    <string name="save_configutaion">Save Button Configuration</string>
+
+    <string name="turn_left_button">Turn Left</string>
+    <string name="turn_right_button">Turn Right</string>
+    <string name="move_forward_button">Forward</string>
+
+    <string name="start_coor_label">Set Start Coordinate</string>
+</resources>

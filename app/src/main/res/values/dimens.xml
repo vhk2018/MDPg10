@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="padding_medium">15dp</dimen>
+    <dimen name="padding_large">20dp</dimen>
+    <dimen name="custom_text_size_medium">20sp</dimen>
+    <dimen name="custom_text_size_large">30sp</dimen>
+    <dimen name="configurable_button_margin">10dp</dimen>
+
+    <dimen name="navigation_drawer_margin">10dp</dimen>
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="default_marginStart">10dp</dimen>
+    <dimen name="default_marginLeft">10dp</dimen>
+    <dimen name="default_dividerHeight">1dp</dimen>
+    <dimen name="default_adapter_height">300dp</dimen>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+</resources>
