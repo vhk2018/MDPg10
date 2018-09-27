@@ -1,5 +1,6 @@
 package com.example.khanhvo.mdp;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +8,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -31,12 +34,21 @@ import com.example.khanhvo.mdp.util.Constant;
 import com.example.khanhvo.mdp.util.ReceiveCommand;
 import com.example.khanhvo.mdp.util.RemoteController;
 
-public class InteractiveControlActivity extends AppCompatActivity implements ToastWrapper, ResetDialogWrapper {
+import java.nio.charset.Charset;
+
+import me.aflak.bluetooth.Bluetooth;
+
+public class InteractiveControlActivity extends AppCompatActivity implements ToastWrapper, ResetDialogWrapper, Bluetooth.CommunicationCallback {
 
     private static RemoteController rc;
     private final String TAG = "InteractiveActivity: ";
+    private DrawerLayout nDrawerLayout;
+    private ActionBarDrawerToggle nToggle;
     private TextView robotStatusView;
     private MazeView mazeView;
+    private Bluetooth b;
+    private BluetoothService mBluetoothService;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +60,13 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);*/
+        nDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        nToggle = new ActionBarDrawerToggle(this, nDrawerLayout, R.string.open, R.string.close);
+
+        nDrawerLayout.addDrawerListener(nToggle);
+        nToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         IntentFilter mFilter = new IntentFilter(Constant.MESSAGE_READ);
         LocalBroadcastManager.getInstance(this).registerReceiver(localBluetoothReceiver, mFilter);
@@ -89,6 +108,18 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             }
         });*/
         mazeLayout.addView(mazeView);
+        b = new Bluetooth(this);
+
+        /*b.enableBluetooth();
+
+        b.setCommunicationCallback(this);
+
+        int pos = getIntent().getExtras().getInt("pos");
+        name = b.getPairedDevices().get(pos).getName();
+
+        //Display("Connecting...");
+        b.connectToDevice(b.getPairedDevices().get(pos));*/
+
     }
 /*
     @Override
@@ -157,14 +188,66 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
 
     public void moveForward(View view) {
         mazeView.moveByButton(Command.MOVE_FORWARD);
+        /*b = new Bluetooth(this);
+        mBluetoothService = BluetoothService.getInstance(getApplicationContext());
+        b.enableBluetooth();
+
+        b.setCommunicationCallback(this);
+        int pos = getIntent().getExtras().getInt("pos");
+        name = b.getPairedDevices().get(pos).getName();
+
+        b.connectToDevice(b.getPairedDevices().get(pos));*/
+        //b = new Bluetooth(this);
+        //((cBaseApplication)this.getApplicationContext()).myBlueTooth.send("f");
+        /*if (((cBaseApplication)this.getApplicationContext()).myBlueTooth.isConnected()) {
+            if (Constant.LOG) {
+                Log.d(TAG, "connected");
+            }
+        } else {
+            if (Constant.LOG) {
+                Log.d(TAG, "not connected");
+            }
+        }
+        //b.getDevice();
+        //b.getSocket();
+        if(mBluetoothService.getReconnectionState())
+            mBluetoothService.reconnect();
+        if (Constant.LOG) {
+            Log.d(TAG, String.valueOf(mBluetoothService.getState()));
+            Log.d(TAG, String.valueOf(mBluetoothService.getConnectedDevice()));
+            Log.d(TAG, String.valueOf(pos));
+            Log.d(TAG, String.valueOf(b.getPairedDevices()));
+            Log.d(TAG, String.valueOf(b.getSocket()));
+            Log.d(TAG, String.valueOf(b.getDevice()));
+        }
+
+        b.connectToDevice(b.getDevice());
+        if (b.isConnected()) {
+            if (Constant.LOG) {
+                Log.d(TAG, "connected to " + mBluetoothService.getConnectedDevice().getName());
+            }
+        } else {
+            if (Constant.LOG) {
+                Log.d(TAG, "not connected1");
+            }
+        }*/
+
+        //mBluetoothChat.write(bytes);
+        ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("f".toString().getBytes(Charset.defaultCharset()));
+
+        //b.send("f");
     }
 
     public void turnLeft(View view) {
         mazeView.moveByButton(Command.TURN_LEFT);
+        ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tl".toString().getBytes(Charset.defaultCharset()));
+
     }
 
     public void turnRight(View view) {
         mazeView.moveByButton(Command.TURN_RIGHT);
+        ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tr".toString().getBytes(Charset.defaultCharset()));
+
     }
 
     public void moveBackward(View view) {
@@ -214,4 +297,28 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         LocalBroadcastManager.getInstance(this).unregisterReceiver(localBluetoothReceiver);
     }
 
+    @Override
+    public void onConnect(BluetoothDevice device) {
+
+    }
+
+    @Override
+    public void onDisconnect(BluetoothDevice device, String message) {
+
+    }
+
+    @Override
+    public void onMessage(String message) {
+
+    }
+
+    @Override
+    public void onError(String message) {
+
+    }
+
+    @Override
+    public void onConnectError(BluetoothDevice device, String message) {
+
+    }
 }

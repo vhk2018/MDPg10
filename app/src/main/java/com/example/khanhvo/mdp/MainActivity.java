@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
     public void openBluetooth(View view) {
         // Do something in response to button
         //Intent intent = new Intent(this, DisplayMessageActivity.class);
-        Intent intent = new Intent(this, Select.class);
+        //Intent intent = new Intent(this, Select.class);
+        Intent intent = new Intent(this, BluetoothStart.class);
         //EditText editText = (EditText) findViewById(R.id.editText);
         //String message = editText.getText().toString();
         //intent.putExtra(EXTRA_MESSAGE, message);

@@ -1,5 +1,7 @@
 package com.example.khanhvo.mdp.bluetoothterminal;
 
+import android.app.Activity;
+import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -26,6 +28,7 @@ import com.example.khanhvo.mdp.R;
 import me.aflak.bluetooth.Bluetooth;
 
 public class Chat extends AppCompatActivity implements Bluetooth.CommunicationCallback {
+//public class Chat extends Application implements Bluetooth.CommunicationCallback {
     private String name;
     private Bluetooth b;
     private EditText message;
@@ -148,6 +151,10 @@ public class Chat extends AppCompatActivity implements Bluetooth.CommunicationCa
     @Override
     public void onMessage(String message) {
         Display(name+": "+message);
+    }
+
+    public void sendMessage(String message) {
+        b.send(message);
     }
 
     @Override

@@ -6,11 +6,9 @@ import android.widget.Toast;
 
 import com.example.khanhvo.mdp.R;
 import com.example.khanhvo.mdp.enumType.Command;
+import com.example.khanhvo.mdp.enumType.Direction;
 import com.example.khanhvo.mdp.util.RemoteController;
 import com.example.khanhvo.mdp.util.Constant;
-
-import com.example.khanhvo.mdp.enumType.Direction;
-
 
 public class Robot {
 

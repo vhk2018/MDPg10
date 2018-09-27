@@ -32,11 +32,11 @@ public class MazeCell {
     }
 
     public void drawCell(Canvas canvas, int x, int y) {
-        int CRADIUS = 2;
+        int CellRadius = 1;
         int xCoordinate = SIZE * (x + padding) + SIZE/2;
         int yCoordinate = SIZE * y + SIZE/2;
         RectF r = new RectF(xCoordinate - SIZE/2, yCoordinate - SIZE/2, xCoordinate + SIZE/2, yCoordinate + SIZE/2);
-        canvas.drawRoundRect(r, CRADIUS, CRADIUS, p);
-        canvas.drawRoundRect(r, CRADIUS, CRADIUS, b);
+        canvas.drawRoundRect(r, CellRadius, CellRadius, p);
+        canvas.drawRoundRect(r, CellRadius, CellRadius, b);
     }
 }

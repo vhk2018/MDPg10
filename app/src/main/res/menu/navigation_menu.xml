@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/bluetooth"
         android:icon="@mipmap/baseline_bluetooth_black_24"
-        android:title="Bluetooth Connection" />
+        android:title="Bluetooth" />
 
     <item android:id="@+id/exploration"
         android:icon="@mipmap/baseline_dashboard_black_24"
-        android:title="Exploration" />
+        android:title="Maze" />
 
     <item android:id="@+id/config"
         android:icon="@mipmap/baseline_settings_black_24"
