@@ -51,7 +51,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     private final String TAG = "InteractiveActivity: ";
     private DrawerLayout nDrawerLayout;
     private ActionBarDrawerToggle nToggle;
-    private TextView robotStatusView;
+    TextView robotStatusView;
     private MazeView mazeView;
     private Button explore;
     private Button run;
@@ -204,7 +204,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra("theMessage");
             Log.d(TAG, text);
-            //robotStatusView.setText("change");
+            robotStatusView.setText(text);
         }
     };
 
