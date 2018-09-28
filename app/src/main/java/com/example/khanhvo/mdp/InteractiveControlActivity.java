@@ -1,6 +1,7 @@
 package com.example.khanhvo.mdp;
 
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +12,16 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +38,9 @@ import com.example.khanhvo.mdp.util.Constant;
 import com.example.khanhvo.mdp.util.ReceiveCommand;
 import com.example.khanhvo.mdp.util.RemoteController;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import me.aflak.bluetooth.Bluetooth;
@@ -46,6 +53,8 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     private ActionBarDrawerToggle nToggle;
     private TextView robotStatusView;
     private MazeView mazeView;
+    private Button explore;
+    private Button run;
     private Bluetooth b;
     private BluetoothService mBluetoothService;
     private String name;
@@ -60,7 +69,11 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);*/
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
         nDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        explore = (Button) findViewById(R.id.explore_button);
+        run = (Button) findViewById(R.id.run_button);
+        robotStatusView = (TextView) findViewById(R.id.robot_current_status);
         nToggle = new ActionBarDrawerToggle(this, nDrawerLayout, R.string.open, R.string.close);
 
         nDrawerLayout.addDrawerListener(nToggle);
@@ -77,6 +90,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         RelativeLayout mazeLayout = (RelativeLayout) findViewById(R.id.maze_layout);
         rc = new RemoteController(this);
         mazeView = new MazeView(this, y, x, Constant.MAZE_PADDED, rc);
+        cBaseApplication.mazeView = mazeView;
         /*mazeView.setOnTouchListener(new OnSwipeListener(InteractiveControlActivity.this) {
 
             public void onSwipeUp() {
@@ -108,7 +122,43 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             }
         });*/
         mazeLayout.addView(mazeView);
-        b = new Bluetooth(this);
+        //mazeLayout.onTouchEvent()
+        // Implement it's on touch listener.
+        mazeLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                // Show an alert dialog.
+                //AlertDialog alertDialog = new AlertDialog.Builder(InteractiveControlActivity.this).create();
+                //alertDialog.setMessage("You touched the Linear Layout.");
+                //alertDialog.show();
+
+
+
+                SetCoordinates setCoordinates = new SetCoordinates();
+                setCoordinates.show(getSupportFragmentManager(),"set_coordinates");
+
+                // Return false, then android os will still process click event,
+                // if return true, the on click listener will never be triggered.
+                return false;
+            }
+        });
+
+        explore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("beginExplore".toString().getBytes(Charset.defaultCharset()));
+
+            }
+        });
+
+        run.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("beginFastest".toString().getBytes(Charset.defaultCharset()));
+
+            }
+        });
 
         /*b.enableBluetooth();
 
@@ -149,9 +199,21 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     }
 */
 
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String text = intent.getStringExtra("theMessage");
+            Log.d(TAG, text);
+            //robotStatusView.setText("change");
+        }
+    };
+
     private final BroadcastReceiver localBluetoothReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            String text = intent.getStringExtra("theMessage");
+            Log.d(TAG, text);
+            Log.d(TAG,cBaseApplication.incomingMessage);
             if (Constant.LOG) {
                 Log.d(TAG, "Map receive updates");
             }
@@ -168,6 +230,43 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             }
         }
     };
+
+    /*BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String text = intent.getStringExtra("theMessage");
+
+            messages.append(text + "\n");
+
+            tv_Receive.setText(messages);
+        }
+    };
+
+
+
+    public void run(){
+        byte[] buffer = new byte[1024]; //buffer store for the stream
+
+        int bytes; //bytes returned from read()
+
+        //keep listening to the InputStream until an exception occurs
+        while (true){
+            //Read from the InputStream
+            try{
+                bytes = mmInStream.read(buffer);
+                String incomingMessage = new String(buffer, 0, bytes);
+                Log.d(TAG, "InputStream: " + incomingMessage);
+
+                Intent incomingMessageIntent = new Intent("incomingMessage");
+                incomingMessageIntent.putExtra("theMessage", incomingMessage);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(incomingMessageIntent);
+            }
+            catch (IOException e){
+                Log.e(TAG, "write: Error reading input stream. " + e.getMessage());
+                break;
+            }
+        }
+    }*/
 
     private void update(ReceiveCommand receiveCommand) {
         int x = receiveCommand.getX();

@@ -236,6 +236,7 @@ public class BluetoothChatService {
         }
 
         public void run(){
+
             byte[] buffer = new byte[1024]; //buffer store for the stream
 
             int bytes; //bytes returned from read()
@@ -246,6 +247,7 @@ public class BluetoothChatService {
                 try{
                     bytes = mmInStream.read(buffer);
                     String incomingMessage = new String(buffer, 0, bytes);
+                    cBaseApplication.incomingMessage = incomingMessage;
                     Log.d(TAG, "InputStream: " + incomingMessage);
 
                     Intent incomingMessageIntent = new Intent("incomingMessage");

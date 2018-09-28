@@ -120,6 +120,11 @@ public class Transmit extends MainActivity{
                     //mBluetoothChat.write(bytes);
                     ((cBaseApplication)getApplicationContext()).mBluetoothChat.write(bytes);
 
+                    //display my output in text view
+                    //String myName = mBluetoothAdapter.getName();
+                    //String outgoingMessage = (myName + ": " + et_Send.getText());
+                    //Display(outgoingMessage);
+
                     et_Send.setText("");
                 }
             }

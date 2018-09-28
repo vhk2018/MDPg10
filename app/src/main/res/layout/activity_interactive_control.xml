@@ -35,41 +35,73 @@
 
     </RelativeLayout>
 
+    <!--android:layout_centerHorizontal="true"-->
+
     <ImageButton
         android:id="@+id/move_forward"
-        android:layout_width="189dp"
+        android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/colorGreen"
         android:onClick="moveForward"
         android:scaleType="fitCenter"
-        android:src="@mipmap/baseline_arrow_drop_up_black_48" />
+        android:src="@mipmap/baseline_arrow_drop_up_black_48"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="2dp" />
 
     <ImageButton
         android:id="@+id/turn_left"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+
         android:layout_marginBottom="2dp"
-        android:backgroundTint="@color/colorLightGreen"
         android:onClick="turnLeft"
         android:scaleType="fitCenter"
         android:src="@mipmap/baseline_chevron_left_black_48"
-        android:layout_alignParentLeft="true" />
+        android:layout_toStartOf="@id/move_forward"
+         />
+
+    <!--android:layout_alignParentEnd="true"-->
 
     <ImageButton
         android:id="@+id/turn_right"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:backgroundTint="@color/colorLightGreen"
         android:onClick="turnRight"
         android:scaleType="fitCenter"
         android:src="@mipmap/baseline_chevron_right_black_48"
-        android:layout_alignParentRight="true" />
+        android:layout_toEndOf="@id/move_forward"
+        android:layout_marginBottom="2dp" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="105dp"
+        android:text="Auto Update"
+        android:textOff=""
+        android:textOn=""
+        android:layout_marginLeft="50dp"/>
+
+    <Button
+        android:id="@+id/explore_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/switch1"
+        android:layout_toStartOf="@+id/run_button"
+        android:text="Explore" />
+
+    <Button
+        android:id="@+id/run_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/switch1"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="120dp"
+        android:text="Run" />
 
     <!--android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"

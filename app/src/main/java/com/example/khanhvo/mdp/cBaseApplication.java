@@ -6,13 +6,18 @@ import android.app.Application;
 import com.example.khanhvo.mdp.bluetoothterminal.Chat;
 import me.aflak.bluetooth.Bluetooth;
 import com.example.khanhvo.mdp.BluetoothChatService;
+import com.example.khanhvo.mdp.mazeDrawer.MazeView;
+import com.example.khanhvo.mdp.mazeDrawer.Robot;
 
 public class cBaseApplication extends Application {
 
     public Bluetooth myBlueTooth;
     private Activity activity;
     //public ConnectedThread mConnectedThread;
-    public BluetoothChatService mBluetoothChat;
+    public static BluetoothChatService mBluetoothChat;
+    public static MazeView mazeView;
+    public static Robot robot;
+    public static String incomingMessage;
 
     @Override
     public void onCreate()

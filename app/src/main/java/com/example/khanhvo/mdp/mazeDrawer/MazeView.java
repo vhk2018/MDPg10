@@ -12,12 +12,15 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.khanhvo.mdp.R;
+import com.example.khanhvo.mdp.cBaseApplication;
 import com.example.khanhvo.mdp.enumType.CellStatus;
 import com.example.khanhvo.mdp.enumType.Command;
 import com.example.khanhvo.mdp.util.Constant;
 import com.example.khanhvo.mdp.enumType.Direction;
 import com.example.khanhvo.mdp.util.ReceiveCommand;
 import com.example.khanhvo.mdp.util.RemoteController;
+
+import java.nio.charset.Charset;
 
 
 public class MazeView extends View {
@@ -54,6 +57,8 @@ public class MazeView extends View {
     public MazeView(Context context, int x, int y, int padding, RemoteController rc) {
         super(context);
         this.robot = new Robot(rc);
+        cBaseApplication.robot=this.robot;
+
         robot.setStartCoordinate(x + 1, y + 1, Direction.NORTH);
         MazeCell.setPadding(padding);
         this.padding = padding;
