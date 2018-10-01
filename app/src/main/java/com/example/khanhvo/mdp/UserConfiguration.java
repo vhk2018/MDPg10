@@ -15,7 +15,7 @@ import java.nio.charset.Charset;
 
 public class UserConfiguration extends AppCompatActivity {
 
-    Button btn_F1, btn_F2, btn_Reconfigurable, btn_Save;
+    Button btn_F1, btn_F2, btn_Reconfigure, btn_Save;
     String F1Text, F2Text;
 
     @Override
@@ -25,7 +25,7 @@ public class UserConfiguration extends AppCompatActivity {
 
         btn_F1 = (Button) findViewById(R.id.btn_F1);
         btn_F2 = (Button) findViewById(R.id.btn_F2);
-        btn_Reconfigurable = (Button) findViewById(R.id.btn_Reconfigurable);
+        btn_Reconfigure = (Button) findViewById(R.id.btn_Reconfigure);
         btn_Save = (Button) findViewById(R.id.btn_Save);
 
         btn_F1.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +48,7 @@ public class UserConfiguration extends AppCompatActivity {
             }
         });
 
-        btn_Reconfigurable.setOnClickListener(new View.OnClickListener() {
+        btn_Reconfigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(UserConfiguration.this);
