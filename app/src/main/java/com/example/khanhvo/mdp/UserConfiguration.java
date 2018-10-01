@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.nio.charset.Charset;
+
 public class UserConfiguration extends AppCompatActivity {
 
     Button btn_F1, btn_F2, btn_Reconfigurable, btn_Save;
@@ -32,7 +34,7 @@ public class UserConfiguration extends AppCompatActivity {
                 SharedPreferences sharedPref = getSharedPreferences("userConfig", Context.MODE_PRIVATE);
                 F1Text = sharedPref.getString("btnF1", "");
                 Toast.makeText(getApplicationContext(),F1Text, Toast.LENGTH_SHORT).show();
-                //((cBaseApplication) getApplicationContext()).mBluetoothChat.write(F1Text.toString().getBytes(Charset.defaultCharset()));
+                ((cBaseApplication) getApplicationContext()).mBluetoothChat.write(F1Text.toString().getBytes(Charset.defaultCharset()));
             }
         });
 
@@ -42,7 +44,7 @@ public class UserConfiguration extends AppCompatActivity {
                 SharedPreferences sharedPref = getSharedPreferences("userConfig", Context.MODE_PRIVATE);
                 F2Text = sharedPref.getString("btnF2", "");
                 Toast.makeText(getApplicationContext(),F2Text, Toast.LENGTH_SHORT).show();
-                //((cBaseApplication) getApplicationContext()).mBluetoothChat.write(F2Text.toString().getBytes(Charset.defaultCharset()));
+                ((cBaseApplication) getApplicationContext()).mBluetoothChat.write(F2Text.toString().getBytes(Charset.defaultCharset()));
             }
         });
 
