@@ -63,4 +63,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void userConfiguration(View view) {
+        Intent intent = new Intent(MainActivity.this, UserConfiguration.class);
+        startActivity(intent);
+    }
 }

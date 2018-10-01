@@ -45,6 +45,15 @@
             android:text="@string/button_send"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="userConfiguration"
+            android:text="User Configuration"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" />
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
