@@ -45,27 +45,65 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="83dp"
         android:gravity="center"
-        android:text="X-coordinate" />
+        android:text="Start    : X-" />
 
     <NumberPicker
         android:id="@+id/numberPicker1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/label1" />
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/label3" />
 
     <TextView
         android:id="@+id/label2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="83dp"
+        android:layout_alignStart="@+id/label4"
+        android:layout_alignTop="@+id/label1"
         android:gravity="center"
-        android:text="Y-coordinate"
-        android:layout_toEndOf="@+id/numberPicker1" />
+        android:text="Y-" />
 
     <NumberPicker
         android:id="@+id/numberPicker2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/label2" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="215dp" />
+
+    <TextView
+        android:id="@+id/label3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/label4"
+        android:gravity="center"
+        android:text="Waypoint: X-" />
+
+    <NumberPicker
+        android:id="@+id/numberPicker3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/numberPicker1"
+        android:layout_marginTop="196dp" />
+
+    <TextView
+        android:id="@+id/label4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="226dp"
+        android:layout_marginTop="280dp"
+        android:gravity="center"
+        android:text="Y-" />
+
+    <NumberPicker
+        android:id="@+id/numberPicker4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/numberPicker2"
+        android:layout_alignTop="@+id/numberPicker3" />
 
 </RelativeLayout>

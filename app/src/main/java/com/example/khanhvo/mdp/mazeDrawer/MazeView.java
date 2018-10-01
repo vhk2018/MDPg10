@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -44,6 +45,8 @@ public class MazeView extends View {
 
     private CellStatus[][] grid = ReceiveCommand.DEFAULT_GRID;
     private Robot robot;
+    private WayPoint waypoint;
+    private ArrowBlock arrowBlock;
     private int padding = Constant.MAZE_NO_PADDING;
 
     public void setCoordinate(int x, int y, Direction dir) {
@@ -53,13 +56,22 @@ public class MazeView extends View {
         }
         invalidate();
     }
+    public void setWaypoint(int x, int y) {
+        waypoint.setCoordinate(x, y);
+        if (Constant.LOG) {
+            Log.d(TAG, waypoint.getX() + "-" + waypoint.getY());
+        }
+        invalidate();
+    }
 
     public MazeView(Context context, int x, int y, int padding, RemoteController rc) {
         super(context);
         this.robot = new Robot(rc);
+        this.waypoint = new WayPoint(rc);
         cBaseApplication.robot=this.robot;
 
         robot.setStartCoordinate(x + 1, y + 1, Direction.NORTH);
+        waypoint.setCoordinate(3,11);
         MazeCell.setPadding(padding);
         this.padding = padding;
         invalidate();
@@ -106,9 +118,12 @@ public class MazeView extends View {
                 GOAL.drawCell(canvas, i + (Constant.WIDTH - Constant.GOAL_SIZE), Constant.GOAL_SIZE + 1 - j);
             }
         }
+//      Draw Waypoint
+        drawWaypoint(canvas, CELLSIZE);
 
 //        Draw Robot
         drawRobot(canvas, CELLSIZE);
+
 
 //        Draw Obstacles
 //        for (Obstacle o : obstacles) {
@@ -130,6 +145,26 @@ public class MazeView extends View {
 
     private int getReverseY(int y) {
         return Constant.HEIGHT - y - 1;
+    }
+
+    private void drawWaypoint(Canvas canvas, int CELLSIZE) {
+        int x = waypoint.getX();
+        int y = getReverseY(waypoint.getY());
+        Matrix matrix = new Matrix();
+
+        matrix.postRotate(180);
+
+        int WAYPOINT_PADDING = CELLSIZE;
+
+        int WAYPOINT_DIAMETER = CELLSIZE - (WAYPOINT_PADDING * 2);
+
+        int WAYPOINT_X = CELLSIZE * x+ WAYPOINT_PADDING;
+        int WAYPOINT_Y = CELLSIZE * y+ WAYPOINT_PADDING;
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.baseline_location_on_black_48);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, WAYPOINT_DIAMETER, WAYPOINT_DIAMETER, true);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+        canvas.drawBitmap(rotatedBitmap, WAYPOINT_X + padding * CELLSIZE, WAYPOINT_Y, null);
     }
 
     private void drawRobot(Canvas canvas, int CELLSIZE) {
@@ -215,6 +250,29 @@ public class MazeView extends View {
         path.close();
 
         canvas.drawPath(path, paint);
+    }
+
+    //public void addArrowBlock(int x, int y){
+    //    drawArrowBlock(canvas, CELLSIZE, x, y);
+    //}
+    public void drawArrowBlock(Canvas canvas, int CELLSIZE, int xArrow, int yArrow) {
+        int xA = xArrow;
+        int yA = getReverseY(yArrow);
+        Matrix matrix = new Matrix();
+
+        matrix.postRotate(180);
+
+        int WAYPOINT_PADDING = CELLSIZE;
+
+        int WAYPOINT_DIAMETER = CELLSIZE - (WAYPOINT_PADDING * 2);
+
+        int WAYPOINT_X = CELLSIZE * xA+ WAYPOINT_PADDING;
+        int WAYPOINT_Y = CELLSIZE * yA+ WAYPOINT_PADDING;
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.baseline_arrow_upward_black_48);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, WAYPOINT_DIAMETER, WAYPOINT_DIAMETER, true);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+        canvas.drawBitmap(rotatedBitmap, WAYPOINT_X + padding * CELLSIZE, WAYPOINT_Y, null);
     }
 
 //    private boolean isCollide() {

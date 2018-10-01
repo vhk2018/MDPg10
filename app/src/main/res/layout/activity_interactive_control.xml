@@ -91,10 +91,10 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignBottom="@+id/switch1"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="199dp"
+        android:layout_alignParentStart="false"
+        android:layout_toRightOf="@+id/switch1"
         android:onClick="moveForward"
-        android:src="@mipmap/baseline_arrow_drop_up_black_48" />
+        android:src="@mipmap/baseline_refresh_black_48" />
 
     <Button
         android:id="@+id/explore_button"

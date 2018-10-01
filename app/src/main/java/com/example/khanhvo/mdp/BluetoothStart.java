@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -351,7 +350,7 @@ public class BluetoothStart extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void StartChat(BluetoothDevice selectedDevice){
-        Intent chatIntent = new Intent(BluetoothStart.this, Transmit.class);
+        Intent chatIntent = new Intent(BluetoothStart.this, BluetoothMessenger.class);
         chatIntent.putExtra("btDevice", selectedDevice);
         startActivity(chatIntent);
     }
@@ -364,16 +363,14 @@ public class BluetoothStart extends AppCompatActivity implements AdapterView.OnI
             mDeviceListAdapter2.clear();
         }
     }
-/*
+
     // create an action bar button
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        MenuItem itemToHide = menu.findItem(R.id.bluetooth);
-        MenuItem itemToHide2 = menu.findItem(R.id.transmit);
-        itemToHide.setVisible(false);
-        itemToHide2.setVisible(false);
+        //MenuItem itemToHide = menu.findItem(R.id.About);
+        //itemToHide.setVisible(false);
         return true;
     }
 
@@ -383,21 +380,16 @@ public class BluetoothStart extends AppCompatActivity implements AdapterView.OnI
         Intent intent;
 
         switch(item.getItemId()){
-            case R.id.transmit:
-                intent = new Intent(this, Transmit.class);
-                startActivity(intent);
-                break;
-            case R.id.bluetooth:
-                intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+            case R.id.About:
+                Toast.makeText(getApplicationContext(), "Made by Spencer Tan and Vo Hong Khanh of Group 10, Semester 1 18/19", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-*/
     @Override
     public void onBackPressed(){
-
+        Intent i = new Intent(BluetoothStart.this, MainActivity.class);
+        startActivity(i);
     }
 }
 

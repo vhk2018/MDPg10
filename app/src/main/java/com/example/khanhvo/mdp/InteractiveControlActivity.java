@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -23,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -56,12 +58,15 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     private ActionBarDrawerToggle nToggle;
     TextView robotStatusView;
     Switch nSwitch;
+    ImageView refresh;
+    Boolean updateManual = false;
     private MazeView mazeView;
     private Button explore;
     private Button run;
     private Bluetooth b;
     private BluetoothService mBluetoothService;
     private String name;
+    Canvas canvas = new Canvas();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +84,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         run = (Button) findViewById(R.id.run_button);
         robotStatusView = (TextView) findViewById(R.id.robot_current_status);
         nToggle = new ActionBarDrawerToggle(this, nDrawerLayout, R.string.open, R.string.close);
-
+        refresh =(ImageView) findViewById(R.id.refresh_button);
         nDrawerLayout.addDrawerListener(nToggle);
         nToggle.syncState();
         nSwitch = (Switch) findViewById(R.id.switch1);
@@ -149,6 +154,8 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             }
         });
 
+        mazeView.drawArrowBlock(canvas,1,8,10);
+
         explore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,10 +175,21 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         nSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    refresh.setVisibility(View.GONE);
                     ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("sendArena".toString().getBytes(Charset.defaultCharset()));
                 } else {
                     // The toggle is disabled
+                    refresh.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("sendArena".toString().getBytes(Charset.defaultCharset()));
+                ReceiveCommand receiveCommand = new ReceiveCommand(cBaseApplication.mazeGrid);
+                update(receiveCommand);
             }
         });
 
@@ -218,11 +236,14 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         @Override
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra("theMessage");
+            cBaseApplication.mazeGrid =text;
             Log.d(TAG, text);
             //robotStatusView.setText(text);
-            if (text != null || text != ""){
+
+            if (text != null && text != "" && nSwitch.isChecked()){
                 ReceiveCommand receiveCommand = new ReceiveCommand(text);
                 update(receiveCommand);
+
             }
         }
     };
@@ -301,8 +322,9 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             Log.d(TAG, receiveCommand.getStr());
         }
         mazeView.setCoordinate(x, y, dir);
-//        mazeView.addObstacles(obstacles);
+//      mazeView.addObstacles(obstacles);
         mazeView.setGrid(grid);
+
         robotStatusView = (TextView) findViewById(R.id.robot_current_status);
         robotStatusView.setText(status);
         Log.d(TAG,status);

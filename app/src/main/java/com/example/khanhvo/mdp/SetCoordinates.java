@@ -31,11 +31,17 @@ public class SetCoordinates extends DialogFragment{
         layoutView = inflater.inflate(R.layout.activity_set_coordinates,null);
         builder.setView(layoutView);
         final NumberPicker np1 = layoutView.findViewById(R.id.numberPicker1);
-        np1.setMaxValue(12);
+        np1.setMaxValue(14);
         np1.setMinValue(0);
         final NumberPicker np2 = layoutView.findViewById(R.id.numberPicker2);
-        np2.setMaxValue(6);
+        np2.setMaxValue(9);
         np2.setMinValue(0);
+        final NumberPicker np3 = layoutView.findViewById(R.id.numberPicker3);
+        np3.setMaxValue(14);
+        np3.setMinValue(0);
+        final NumberPicker np4 = layoutView.findViewById(R.id.numberPicker4);
+        np4.setMaxValue(19);
+        np4.setMinValue(0);
 
         builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
             @Override
@@ -46,11 +52,14 @@ public class SetCoordinates extends DialogFragment{
                 //final int y = Integer.parseInt(yInput.getText().toString());
                 final int x = np1.getValue();
                 final int y = np2.getValue();
+                final int xW = np3.getValue();
+                final int yW = np4.getValue();
                 Log.d("set coordinates","receive coordinates");
                 cBaseApplication.mazeView.setCoordinate(x,y, Direction.NORTH);
+                cBaseApplication.mazeView.setWaypoint(xW,yW);
                 Log.d("set coordinates","finished setting new coordinates");
                 cBaseApplication.mBluetoothChat.write(("coordinate ("+(x)+","+(y)+")").getBytes(Charset.defaultCharset()));
-
+                cBaseApplication.mBluetoothChat.write(("waypoint ("+(xW)+","+(yW)+")").getBytes(Charset.defaultCharset()));
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
