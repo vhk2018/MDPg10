@@ -18,6 +18,7 @@ public class cBaseApplication extends Application {
     public static MazeView mazeView;
     public static Robot robot;
     public static String incomingMessage;
+    public static String gridValue = "000000000000000000000000000000000000000000000000000000000000000000000000000";
 
     @Override
     public void onCreate()

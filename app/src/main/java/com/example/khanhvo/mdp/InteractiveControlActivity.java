@@ -22,7 +22,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import me.aflak.bluetooth.Bluetooth;
 
@@ -52,6 +55,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     private DrawerLayout nDrawerLayout;
     private ActionBarDrawerToggle nToggle;
     TextView robotStatusView;
+    Switch nSwitch;
     private MazeView mazeView;
     private Button explore;
     private Button run;
@@ -78,6 +82,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
 
         nDrawerLayout.addDrawerListener(nToggle);
         nToggle.syncState();
+        nSwitch = (Switch) findViewById(R.id.switch1);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -160,6 +165,16 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             }
         });
 
+        nSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("sendArena".toString().getBytes(Charset.defaultCharset()));
+                } else {
+                    // The toggle is disabled
+                }
+            }
+        });
+
         /*b.enableBluetooth();
 
         b.setCommunicationCallback(this);
@@ -204,7 +219,11 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         public void onReceive(Context context, Intent intent) {
             String text = intent.getStringExtra("theMessage");
             Log.d(TAG, text);
-            robotStatusView.setText(text);
+            //robotStatusView.setText(text);
+            if (text != null || text != ""){
+                ReceiveCommand receiveCommand = new ReceiveCommand(text);
+                update(receiveCommand);
+            }
         }
     };
 
@@ -274,6 +293,9 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         Direction dir = receiveCommand.getDir();
 //        HashSet obstacles = receiveCommand.getObstacles();
         CellStatus[][] grid = receiveCommand.getGrid();
+        if (Constant.LOG) {
+            Log.d(TAG, String.valueOf(receiveCommand.getGrid()));
+        }
         String status = receiveCommand.getStatus();
         if (Constant.LOG) {
             Log.d(TAG, receiveCommand.getStr());
@@ -283,6 +305,8 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         mazeView.setGrid(grid);
         robotStatusView = (TextView) findViewById(R.id.robot_current_status);
         robotStatusView.setText(status);
+        Log.d(TAG,status);
+        Log.d(TAG,"set grid "+ Arrays.deepToString(grid));
     }
 
     public void moveForward(View view) {

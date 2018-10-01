@@ -49,7 +49,7 @@ public class SetCoordinates extends DialogFragment{
                 Log.d("set coordinates","receive coordinates");
                 cBaseApplication.mazeView.setCoordinate(x,y, Direction.NORTH);
                 Log.d("set coordinates","finished setting new coordinates");
-                cBaseApplication.mBluetoothChat.write(("x:"+(x)+",y:"+(y)).getBytes(Charset.defaultCharset()));
+                cBaseApplication.mBluetoothChat.write(("coordinate ("+(x)+","+(y)+")").getBytes(Charset.defaultCharset()));
 
             }
         });

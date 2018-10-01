@@ -86,6 +86,16 @@
         android:textOn=""
         android:layout_marginLeft="50dp"/>
 
+    <ImageButton
+        android:id="@+id/refresh_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/switch1"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="199dp"
+        android:onClick="moveForward"
+        android:src="@mipmap/baseline_arrow_drop_up_black_48" />
+
     <Button
         android:id="@+id/explore_button"
         android:layout_width="wrap_content"
