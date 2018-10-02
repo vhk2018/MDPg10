@@ -5,10 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -22,6 +26,8 @@ import com.example.khanhvo.mdp.util.ReceiveCommand;
 import com.example.khanhvo.mdp.util.RemoteController;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MazeView extends View {
@@ -46,7 +52,7 @@ public class MazeView extends View {
     private CellStatus[][] grid = ReceiveCommand.DEFAULT_GRID;
     private Robot robot;
     private WayPoint waypoint;
-    private ArrowBlock arrowBlock;
+    public List<ArrowBlock> arrowBlock;
     private int padding = Constant.MAZE_NO_PADDING;
 
     public void setCoordinate(int x, int y, Direction dir) {
@@ -64,11 +70,27 @@ public class MazeView extends View {
         invalidate();
     }
 
+    public void setArrow(ArrowBlock a, int x, int y) {
+        a.set(x, y);
+        if (Constant.LOG) {
+            Log.d(TAG, a.getX() + "-" + a.getY());
+        }
+        invalidate();
+    }
+
     public MazeView(Context context, int x, int y, int padding, RemoteController rc) {
         super(context);
         this.robot = new Robot(rc);
         this.waypoint = new WayPoint(rc);
+        this.arrowBlock = new ArrayList<ArrowBlock>();
         cBaseApplication.robot=this.robot;
+        for(int i = 0; i <= 30; i++)
+        {
+            ArrowBlock a = new ArrowBlock();
+            a.set(-2, -2);
+            arrowBlock.add(i, a);
+            //drawArrowBlock(canvas,CELLSIZE,i);
+        }
 
         robot.setStartCoordinate(x + 1, y + 1, Direction.NORTH);
         waypoint.setCoordinate(3,11);
@@ -120,6 +142,14 @@ public class MazeView extends View {
         }
 //      Draw Waypoint
         drawWaypoint(canvas, CELLSIZE);
+        //Draw ArrowBlocks
+        for(int i = 0; i <= 30; i++)
+        {
+            drawArrowBlock(canvas,CELLSIZE,i);
+        }
+        //for(ArrowBlock a : arrowBlock){
+            //drawArrowBlock(canvas,CELLSIZE);
+        //}
 
 //        Draw Robot
         drawRobot(canvas, CELLSIZE);
@@ -255,9 +285,13 @@ public class MazeView extends View {
     //public void addArrowBlock(int x, int y){
     //    drawArrowBlock(canvas, CELLSIZE, x, y);
     //}
-    public void drawArrowBlock(Canvas canvas, int CELLSIZE, int xArrow, int yArrow) {
-        int xA = xArrow;
-        int yA = getReverseY(yArrow);
+    public void drawArrowBlock(Canvas canvas, int CELLSIZE, int pos){//}, int xArrow, int yArrow) {
+        Paint pA = new Paint();
+        //ColorFilter filter = new PorterDuffColorFilter(ContextCompat.getColor(this, Color.WHITE), PorterDuff.Mode.SRC_IN);
+        pA.setColor(Color.GREEN);
+
+        int xA = (arrowBlock.get(pos)).getX();//xArrow;
+        int yA = arrowBlock.get(pos).getY() + 2;
         Matrix matrix = new Matrix();
 
         matrix.postRotate(180);
@@ -269,10 +303,12 @@ public class MazeView extends View {
         int WAYPOINT_X = CELLSIZE * xA+ WAYPOINT_PADDING;
         int WAYPOINT_Y = CELLSIZE * yA+ WAYPOINT_PADDING;
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.baseline_arrow_upward_black_48);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.baseline_arrow_upward_white_48);
+//        bitmap.s
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, WAYPOINT_DIAMETER, WAYPOINT_DIAMETER, true);
         Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
         canvas.drawBitmap(rotatedBitmap, WAYPOINT_X + padding * CELLSIZE, WAYPOINT_Y, null);
+
     }
 
 //    private boolean isCollide() {

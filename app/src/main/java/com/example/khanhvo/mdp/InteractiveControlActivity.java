@@ -7,6 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Canvas;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -50,7 +54,7 @@ import java.util.Arrays;
 
 import me.aflak.bluetooth.Bluetooth;
 
-public class InteractiveControlActivity extends AppCompatActivity implements ToastWrapper, ResetDialogWrapper, Bluetooth.CommunicationCallback {
+public class InteractiveControlActivity extends AppCompatActivity implements ToastWrapper, ResetDialogWrapper, SensorEventListener, Bluetooth.CommunicationCallback {
 
     private static RemoteController rc;
     private final String TAG = "InteractiveActivity: ";
@@ -60,13 +64,18 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     Switch nSwitch;
     ImageView refresh;
     Boolean updateManual = false;
+    public int index = 0;
     private MazeView mazeView;
     private Button explore;
     private Button run;
+    Button calibration;
     private Bluetooth b;
     private BluetoothService mBluetoothService;
     private String name;
     Canvas canvas = new Canvas();
+    private SensorManager sensorManager;
+    private Sensor sensor;
+    long lastUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         nDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         explore = (Button) findViewById(R.id.explore_button);
         run = (Button) findViewById(R.id.run_button);
+        calibration = (Button) findViewById(R.id.calibration_button);
         robotStatusView = (TextView) findViewById(R.id.robot_current_status);
         nToggle = new ActionBarDrawerToggle(this, nDrawerLayout, R.string.open, R.string.close);
         refresh =(ImageView) findViewById(R.id.refresh_button);
@@ -90,6 +100,12 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         nSwitch = (Switch) findViewById(R.id.switch1);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //declaring Sensor Manager and sensor type
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL,SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
+        lastUpdate = System.currentTimeMillis();
 
         IntentFilter mFilter = new IntentFilter(Constant.MESSAGE_READ);
         LocalBroadcastManager.getInstance(this).registerReceiver(localBluetoothReceiver, mFilter);
@@ -154,12 +170,12 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             }
         });
 
-        mazeView.drawArrowBlock(canvas,1,8,10);
+        //mazeView.drawArrowBlock(canvas,1,8,10);
 
         explore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("beginExplore".toString().getBytes(Charset.defaultCharset()));
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
 
             }
         });
@@ -167,7 +183,15 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         run.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("beginFastest".toString().getBytes(Charset.defaultCharset()));
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
+
+            }
+        });
+
+        calibration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Ar".toString().getBytes(Charset.defaultCharset()));
 
             }
         });
@@ -311,6 +335,8 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     private void update(ReceiveCommand receiveCommand) {
         int x = receiveCommand.getX();
         int y = receiveCommand.getY();
+        int xA = receiveCommand.getXA();
+        int yA = receiveCommand.getYA();
         Direction dir = receiveCommand.getDir();
 //        HashSet obstacles = receiveCommand.getObstacles();
         CellStatus[][] grid = receiveCommand.getGrid();
@@ -324,6 +350,8 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         mazeView.setCoordinate(x, y, dir);
 //      mazeView.addObstacles(obstacles);
         mazeView.setGrid(grid);
+        mazeView.setArrow(mazeView.arrowBlock.get(index),xA,yA);
+        index++;
 
         robotStatusView = (TextView) findViewById(R.id.robot_current_status);
         robotStatusView.setText(status);
@@ -464,6 +492,88 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
 
     @Override
     public void onConnectError(BluetoothDevice device, String message) {
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        //mHandler = new Handler();
+
+        float x = event.values[0];
+        float y = event.values[1];
+
+        Log.d(TAG, "onSensorChanged: X: " + x + ", onSensorChanged: Y: " + y);
+
+
+        if (Math.abs(x) > Math.abs(y)) {
+            if (x < -4) {
+                //mazeView.moveByButton(Command.TURN_RIGHT);
+                //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tr".toString().getBytes(Charset.defaultCharset()));
+                //sendToast("RIGHT");
+
+            }
+            if (x > 4) {
+                //mazeView.moveByButton(Command.TURN_LEFT);
+                //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tl".toString().getBytes(Charset.defaultCharset()));
+                //sendToast("LEFT");
+            }
+        } else {
+            if (y < -2) {
+                //mazeView.moveByButton(Command.MOVE_FORWARD);
+                //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("f".toString().getBytes(Charset.defaultCharset()));
+                //sendToast("UP");
+            }
+            if (y > 4) {
+
+            }
+        }
+        if (x > (-4) && x < (4) && y > (-2) && y < (4)) {
+            Log.d(TAG, "Stable");
+        }
+    /*
+        float x = event.values[0];
+        float y = event.values[1];
+        if (Math.abs(x) > Math.abs(y)) {
+            if (x < 0) {
+                //image.setImageResource(R.drawable.right);
+                //textView.setText("You tilt the device right");
+                mazeView.moveByButton(Command.TURN_RIGHT);
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tr".toString().getBytes(Charset.defaultCharset()));
+                sendToast("RIGHT");
+            }
+            if (x > 0) {
+                //image.setImageResource(R.drawable.left);
+                //textView.setText("You tilt the device left");
+                mazeView.moveByButton(Command.TURN_LEFT);
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tl".toString().getBytes(Charset.defaultCharset()));
+                sendToast("LEFT");
+            }
+        } else {
+            if (y < 0) {
+                //image.setImageResource(R.drawable.up);
+                //textView.setText("You tilt the device up");
+                mazeView.moveByButton(Command.MOVE_FORWARD);
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("f".toString().getBytes(Charset.defaultCharset()));
+                sendToast("UP");
+            }
+            if (y > 0) {
+                //image.setImageResource(R.drawable.down);
+                //textView.setText("You tilt the device down");
+            }
+        }
+        if (x > (-2) && x < (2) && y > (-2) && y < (2)) {
+            //image.setImageResource(R.drawable.center);
+            //textView.setText("Not tilt device");
+        }*/
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 }

@@ -31,6 +31,8 @@ public class ReceiveCommand {
     private CellStatus[][] grid;
     private int xCoor = 0;
     private int yCoor = 0;
+    private int xA = 0;
+    private int yA = 0;
     private Direction dir = NORTH;
     private String status = Constant.EMPTY_STRING;
 
@@ -84,6 +86,12 @@ public class ReceiveCommand {
             }
             if (map.get("y")!=null){
                 yCoor = 17-Integer.valueOf(map.get("y"));//scanner.nextInt();
+            }
+            if (map.get("xA") != null){
+                xA = Integer.valueOf(map.get("xA"));//scanner.nextInt();
+            }
+            if (map.get("yA")!=null){
+                yA = 17-Integer.valueOf(map.get("yA"));//scanner.nextInt();
             }
             if (map.get("dir")!= null){
                 dir = Direction.getEnum((Integer.valueOf(map.get("dir"))/90+1)%4);//Direction.getEnum(scanner.nextInt());
@@ -279,6 +287,14 @@ public class ReceiveCommand {
 
     public int getY() {
         return this.yCoor;
+    }
+
+    public int getXA() {
+        return this.xA;
+    }
+
+    public int getYA() {
+        return this.yA;
     }
 
     public Direction getDir() {

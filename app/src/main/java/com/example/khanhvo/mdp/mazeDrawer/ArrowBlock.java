@@ -16,7 +16,7 @@ public class ArrowBlock {
     private int x;// = 7;
     private int y;// = 10;
 
-    public ArrowBlock(RemoteController rc) {
+    public ArrowBlock() {
         this.rc = rc;
     }
 
@@ -28,7 +28,7 @@ public class ArrowBlock {
         return this.y;
     }
 
-    public void addArrowBlock(int x, int y) {
+    public void set(int x, int y) {
         this.x = x;
         this.y = y;
     }
