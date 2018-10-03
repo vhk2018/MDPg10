@@ -337,6 +337,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         int y = receiveCommand.getY();
         int xA = receiveCommand.getXA();
         int yA = receiveCommand.getYA();
+        Log.d(TAG, String.valueOf(xA));
         Direction dir = receiveCommand.getDir();
 //        HashSet obstacles = receiveCommand.getObstacles();
         CellStatus[][] grid = receiveCommand.getGrid();
