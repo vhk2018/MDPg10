@@ -331,12 +331,13 @@ public class BluetoothStart extends AppCompatActivity implements AdapterView.OnI
                     Log.d(TAG, "Trying to pair with " + deviceName);
                     mBTDevices.get(position).createBond();
 
-                    mBTDevice = mBTDevices.get(position);
+                    //mBTDevice = mBTDevices.get(position);
                     //mBluetoothChat = new BluetoothChatService(MainActivity.this);
                 }
                 else if (mBTDevices.get(position).getBondState() == BluetoothDevice.BOND_BONDED) {
                     //Start chat if already paired
-                    StartChat(mBTDevices.get(position));
+                    mBTDevice = mBTDevices.get(position);
+                    StartChat();
                 }
                 else {
                     Log.d(TAG, "onItemClick: did nothing.");
@@ -349,9 +350,9 @@ public class BluetoothStart extends AppCompatActivity implements AdapterView.OnI
         } //method ends here
     }
 
-    public void StartChat(BluetoothDevice selectedDevice){
+    public void StartChat(){
         Intent chatIntent = new Intent(BluetoothStart.this, BluetoothMessenger.class);
-        chatIntent.putExtra("btDevice", selectedDevice);
+        chatIntent.putExtra("btDevice", mBTDevice);
         startActivity(chatIntent);
     }
 

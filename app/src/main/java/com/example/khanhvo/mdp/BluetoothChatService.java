@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.khanhvo.mdp.enumType.BluetoothState;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,6 +38,8 @@ public class BluetoothChatService {
     private BluetoothDevice mmDevice;
     private UUID deviceUUID;
     ProgressDialog mProgressDialog;
+    private BluetoothState mState;
+    private static LocalBroadcastManager mBroadcaster = null;
 
     private ConnectedThread mConnectedThread;
     //public ConnectedThread mConnectedThread;
@@ -43,6 +47,7 @@ public class BluetoothChatService {
     public BluetoothChatService(Context context) {
         mContext = context;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mState = BluetoothState.NONE;
         start();
     }
 
@@ -88,7 +93,7 @@ public class BluetoothChatService {
 
             //talk about it later
             if (socket != null){
-                connected(socket, mmDevice);
+                connected(socket, socket.getRemoteDevice());//mmDevice);
             }
             Log.i(TAG, "END mAcceptThread.");
         }
@@ -161,7 +166,7 @@ public class BluetoothChatService {
                 Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID_INSECURE);
             }
 
-            //connected(mmSocket, mmDevice);
+            connected(mmSocket, mmDevice);
         }
 
         public void cancel(){
@@ -256,6 +261,8 @@ public class BluetoothChatService {
                 }
                 catch (IOException e){
                     Log.e(TAG, "write: Error reading input stream. " + e.getMessage());
+                    connectionLost();
+                    BluetoothChatService.this.listen();
                     break;
                 }
             }
@@ -303,5 +310,58 @@ public class BluetoothChatService {
         Log.d(TAG, "write: Write Called.");
         //perform the write
         mConnectedThread.write(out);
+    }
+
+    private void connectionLost()
+    {
+        // Send a failure message back to the Activity
+        /*Message msg = mHandler.obtainMessage(Constant.MESSAGE_TOAST);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.TOAST, "Device connection was lost");
+        msg.setData(bundle);
+        mHandler.sendMessage(msg);*/
+        setConnectedDevice(null);
+        Intent btintent = new Intent("message_toast");
+        btintent.putExtra("extra_string","Device connection was lost");
+        mBroadcaster = LocalBroadcastManager.getInstance(mContext);
+        mBroadcaster.sendBroadcast(btintent);
+
+        mState = BluetoothState.NONE;
+
+        // Start the service over to restart listening mode
+        BluetoothChatService.this.listen();
+    }
+
+    public synchronized void listen()
+    {
+        if(mConnectThread != null)
+        {
+            mConnectThread.cancel();
+            mConnectThread = null;
+        }
+
+        if(mConnectedThread != null)
+        {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
+        //setState(BluetoothState.LISTENING);
+
+        /*if(mSecureAcceptThread == null)
+        {
+            mSecureAcceptThread = new AcceptThread(true);
+            mSecureAcceptThread.start();
+        }*/
+
+        if (mInsecureAcceptThread == null)
+        {
+            mInsecureAcceptThread = new AcceptThread();
+            mInsecureAcceptThread.start();
+        }
+    }
+
+    public void setConnectedDevice(BluetoothDevice device)
+    {
+        mmDevice = device;
     }
 }

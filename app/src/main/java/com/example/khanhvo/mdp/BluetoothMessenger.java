@@ -58,7 +58,7 @@ public class BluetoothMessenger extends BluetoothStart{
             else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
                 //Device is now connected
                 Log.d(TAG, "btReceiver: Connected.");
-                btn_Send.setEnabled(true);
+                //btn_Send.setEnabled(true);
                 Display("Connected to "+ device.getName()+ " - " + device.getAddress());
             }
             else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
@@ -68,7 +68,7 @@ public class BluetoothMessenger extends BluetoothStart{
             else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
                 //Device has disconnected
                 Log.d(TAG, "btReceiver: Disconnected.");
-                btn_Send.setEnabled(false);
+                //btn_Send.setEnabled(false);
                 Display("Connection was lost.");
                 Display("Reconnecting...");
                 startConnection();
@@ -95,7 +95,7 @@ public class BluetoothMessenger extends BluetoothStart{
         //setSupportActionBar(toolbar);
 
         btn_Send = (Button)findViewById(R.id.btn_Send);
-        btn_Send.setEnabled(false);
+        //btn_Send.setEnabled(false);
         et_Send = (EditText)findViewById(R.id.et_Send);
         tv_Receive = (TextView)findViewById(R.id.tv_Receive);
         //scrollable textview
