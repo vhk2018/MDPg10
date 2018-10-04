@@ -42,11 +42,10 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/turn_left"
         android:onClick="moveForward"
         android:scaleType="fitCenter"
-        android:src="@mipmap/baseline_arrow_drop_up_black_48"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="2dp" />
+        android:src="@mipmap/baseline_arrow_drop_up_black_48" />
 
     <ImageButton
         android:id="@+id/turn_left"
@@ -54,12 +53,10 @@
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
 
-        android:layout_marginBottom="2dp"
+        android:layout_alignStart="@+id/switch1"
         android:onClick="turnLeft"
         android:scaleType="fitCenter"
-        android:src="@mipmap/baseline_chevron_left_black_48"
-        android:layout_toStartOf="@id/move_forward"
-         />
+        android:src="@mipmap/baseline_chevron_left_black_48" />
 
     <!--android:layout_alignParentEnd="true"-->
 
@@ -68,11 +65,10 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/move_forward"
         android:onClick="turnRight"
         android:scaleType="fitCenter"
-        android:src="@mipmap/baseline_chevron_right_black_48"
-        android:layout_toEndOf="@id/move_forward"
-        android:layout_marginBottom="2dp" />
+        android:src="@mipmap/baseline_chevron_right_black_48" />
 
     <Switch
         android:id="@+id/switch1"
@@ -90,9 +86,9 @@
         android:id="@+id/refresh_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignBottom="@+id/switch1"
-        android:layout_alignParentStart="false"
-        android:layout_toRightOf="@+id/switch1"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/switch1"
+        android:layout_marginStart="242dp"
         android:onClick="moveForward"
         android:src="@mipmap/baseline_refresh_black_48" />
 
@@ -120,6 +116,22 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="40dp"
         android:text="Cali" />
+
+    <Button
+        android:id="@+id/l_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/refresh_button"
+        android:layout_toEndOf="@+id/explore_button"
+        android:text="L" />
+
+    <Button
+        android:id="@+id/r_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/l_button"
+        android:layout_toEndOf="@+id/run_button"
+        android:text="R" />
 
     <!--android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"

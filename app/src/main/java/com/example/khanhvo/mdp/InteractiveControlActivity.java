@@ -69,6 +69,8 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     private Button explore;
     private Button run;
     Button calibration;
+    Button btn_L;
+    Button btn_R;
     private Bluetooth b;
     private BluetoothService mBluetoothService;
     private String name;
@@ -92,6 +94,8 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         explore = (Button) findViewById(R.id.explore_button);
         run = (Button) findViewById(R.id.run_button);
         calibration = (Button) findViewById(R.id.calibration_button);
+        btn_L = (Button) findViewById(R.id.l_button);
+        btn_R = (Button) findViewById(R.id.r_button);
         robotStatusView = (TextView) findViewById(R.id.robot_current_status);
         nToggle = new ActionBarDrawerToggle(this, nDrawerLayout, R.string.open, R.string.close);
         refresh =(ImageView) findViewById(R.id.refresh_button);
@@ -175,16 +179,16 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         explore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
-
+                //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
+                cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX())+"},{"+(mazeView.robot.getY())+"}").getBytes(Charset.defaultCharset()));
             }
         });
 
         run.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
-
+                //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
+                cBaseApplication.mBluetoothChat.write(("Pfps{"+(mazeView.waypoint.getX())+"},{"+(mazeView.waypoint.getY())+"}").getBytes(Charset.defaultCharset()));
             }
         });
 
@@ -192,6 +196,22 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             @Override
             public void onClick(View view) {
                 ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Ar".toString().getBytes(Charset.defaultCharset()));
+
+            }
+        });
+
+        btn_L.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Am".toString().getBytes(Charset.defaultCharset()));
+
+            }
+        });
+
+        btn_R.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("An".toString().getBytes(Charset.defaultCharset()));
 
             }
         });
@@ -337,7 +357,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         int y = receiveCommand.getY();
         int xA = receiveCommand.getXA();
         int yA = receiveCommand.getYA();
-        Log.d(TAG, String.valueOf(xA));
+        Log.d(TAG, "*************"+String.valueOf(xA));
         Direction dir = receiveCommand.getDir();
 //        HashSet obstacles = receiveCommand.getObstacles();
         CellStatus[][] grid = receiveCommand.getGrid();
@@ -351,8 +371,11 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         mazeView.setCoordinate(x, y, dir);
 //      mazeView.addObstacles(obstacles);
         mazeView.setGrid(grid);
-        mazeView.setArrow(mazeView.arrowBlock.get(index),xA,yA);
-        index++;
+        Log.d("TAG","INDEX="+index);
+        if (xA!=0 && yA!=0){
+            mazeView.setArrow(mazeView.arrowBlock.get(index),xA,yA);
+            index++;
+        }
 
         robotStatusView = (TextView) findViewById(R.id.robot_current_status);
         robotStatusView.setText(status);
@@ -499,6 +522,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     @Override
     public void onSensorChanged(SensorEvent event) {
         //mHandler = new Handler();
+        /*
 
         float x = event.values[0];
         float y = event.values[1];

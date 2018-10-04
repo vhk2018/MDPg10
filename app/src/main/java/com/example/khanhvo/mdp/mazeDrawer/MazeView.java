@@ -50,8 +50,8 @@ public class MazeView extends View {
     private final String TAG = "MazeView: ";
 
     private CellStatus[][] grid = ReceiveCommand.DEFAULT_GRID;
-    private Robot robot;
-    private WayPoint waypoint;
+    public Robot robot;
+    public WayPoint waypoint;
     public List<ArrowBlock> arrowBlock;
     private int padding = Constant.MAZE_NO_PADDING;
 
@@ -93,7 +93,7 @@ public class MazeView extends View {
         }
 
         robot.setStartCoordinate(x + 1, y + 1, Direction.NORTH);
-        waypoint.setCoordinate(3,11);
+        waypoint.setCoordinate(-1,-1);
         MazeCell.setPadding(padding);
         this.padding = padding;
         invalidate();
