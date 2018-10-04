@@ -59,7 +59,7 @@ public class SetCoordinates extends DialogFragment{
                 cBaseApplication.mazeView.setWaypoint(xW,yW);
                 Log.d("set coordinates","finished setting new coordinates");
                 //cBaseApplication.mBluetoothChat.write(("Pexs{"+(x)+"},{"+(y)+"}").getBytes(Charset.defaultCharset()));
-                //cBaseApplication.mBluetoothChat.write(("waypoint ("+(xW)+","+(yW)+")").getBytes(Charset.defaultCharset()));
+                cBaseApplication.mBluetoothChat.write(("Pw"+(xW)+","+(yW)).getBytes(Charset.defaultCharset()));
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

@@ -44,7 +44,8 @@ public class ReceiveCommand {
 
     private void tokenize() {
         try {
-            str = str.substring(1, str.length()-1);           //remove curly brackets
+            Log.d(TAG, String.valueOf(str));
+            str = str.replace("{", "").replace("}","");//str.substring(1, str.length()-2);           //remove curly brackets
             String[] keyValuePairs = str.split(",");              //split the string to creat key-value pairs
             Map<String,String> map = new HashMap<>();
             Log.d(TAG, "-----------------------------");
@@ -85,16 +86,17 @@ public class ReceiveCommand {
                 xCoor = Integer.valueOf(map.get("x"));//scanner.nextInt();
             }
             if (map.get("y")!=null){
-                yCoor = 17-Integer.valueOf(map.get("y"));//scanner.nextInt();
+                yCoor = 17 - Integer.valueOf(map.get("y"));//scanner.nextInt();
             }
             if (map.get("xA") != null){
                 xA = Integer.valueOf(map.get("xA"));//scanner.nextInt();
             }
             if (map.get("yA")!=null){
-                yA = 17-Integer.valueOf(map.get("yA"));//scanner.nextInt();
+                yA = 17 - Integer.valueOf(map.get("yA"));//scanner.nextInt();
             }
             if (map.get("dir")!= null){
-                dir = Direction.getEnum((Integer.valueOf(map.get("dir"))/90+1)%4);//Direction.getEnum(scanner.nextInt());
+                //dir = Direction.getEnum(Integer.valueOf(map.get("dir")));//Direction.getEnum(scanner.nextInt());
+                dir = Direction.getEnum(Integer.valueOf(map.get("dir").charAt(0)));//.substring(0,0)));//Direction.getEnum(scanner.nextInt());
             }
             if (map.get("status")!=null){
                 status = map.get("status");//scanner.nextLine().trim();

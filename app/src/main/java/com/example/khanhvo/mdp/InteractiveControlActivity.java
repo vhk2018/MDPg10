@@ -180,7 +180,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             @Override
             public void onClick(View view) {
                 //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
-                cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX())+"},{"+(mazeView.robot.getY())+"}").getBytes(Charset.defaultCharset()));
+                cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX()+1)+"},{"+(mazeView.robot.getY()+1)+"}").getBytes(Charset.defaultCharset()));
             }
         });
 
@@ -188,7 +188,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             @Override
             public void onClick(View view) {
                 //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
-                cBaseApplication.mBluetoothChat.write(("Pfps{"+(mazeView.waypoint.getX())+"},{"+(mazeView.waypoint.getY())+"}").getBytes(Charset.defaultCharset()));
+                cBaseApplication.mBluetoothChat.write(("Pfps").getBytes(Charset.defaultCharset()));
             }
         });
 
@@ -368,13 +368,16 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         if (Constant.LOG) {
             Log.d(TAG, receiveCommand.getStr());
         }
-        mazeView.setCoordinate(x, y, dir);
-//      mazeView.addObstacles(obstacles);
-        mazeView.setGrid(grid);
+
+
         Log.d("TAG","INDEX="+index);
-        if (xA!=0 && yA!=0){
+        if (xA!=0 && yA!=0 && index <30){
             mazeView.setArrow(mazeView.arrowBlock.get(index),xA,yA);
             index++;
+        } else {
+            mazeView.setCoordinate(x-1, y-1, dir);
+//      mazeView.addObstacles(obstacles);
+            mazeView.setGrid(grid);
         }
 
         robotStatusView = (TextView) findViewById(R.id.robot_current_status);
