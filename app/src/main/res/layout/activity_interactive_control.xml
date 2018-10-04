@@ -12,18 +12,28 @@
     android:layout_height="match_parent"
     >
 
-    <TextView
-        android:layout_width="match_parent"
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/robot_current_status"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="108dp"
+        android:textSize="20sp" />
+
+    <TextView
         android:id="@+id/robot_current_status"
-        android:text="@string/robot_initial_status"
-        android:gravity="center"
-        android:textSize="@dimen/custom_text_size_medium"
-        android:padding="5dp"
-        android:textColor="@color/colorBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/my_toolbar"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="138dp"
         android:background="@color/colorWhite"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/my_toolbar"/>
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/robot_initial_status"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/custom_text_size_medium" />
 
     <RelativeLayout
         android:id="@+id/maze_layout"
@@ -132,6 +142,18 @@
         android:layout_alignTop="@+id/l_button"
         android:layout_toEndOf="@+id/run_button"
         android:text="R" />
+
+    <Button
+        android:id="@+id/btn_StopChronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="217dp"
+        android:layout_marginBottom="44dp"
+        android:onClick="pauseChronometer"
+        android:text="Stop" />
+
 
     <!--android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
