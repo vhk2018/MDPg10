@@ -208,6 +208,9 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             public void onClick(View view) {
                 //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
                 cBaseApplication.mBluetoothChat.write(("Pfps").getBytes(Charset.defaultCharset()));
+
+                //NEW
+                startChronometer(chronometer);
             }
         });
 
