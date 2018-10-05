@@ -70,10 +70,10 @@ public class MazeView extends View {
         invalidate();
     }
 
-    public void setArrow(ArrowBlock a, int x, int y) {
-        a.set(x, y);
+    public void setArrow(ArrowBlock a, int x, int y, String face) {
+        a.set(x, y, face);
         if (Constant.LOG) {
-            Log.d(TAG, a.getX() + "-" + a.getY());
+            Log.d(TAG, a.getX() + "-" + a.getY() + "-" + a.getFace());
         }
         invalidate();
     }
@@ -87,7 +87,7 @@ public class MazeView extends View {
         for(int i = 0; i <= 30; i++)
         {
             ArrowBlock a = new ArrowBlock();
-            a.set(-2, -2);
+            a.set(-2, -2, "D");
             arrowBlock.add(i, a);
             //drawArrowBlock(canvas,CELLSIZE,i);
         }
@@ -292,9 +292,16 @@ public class MazeView extends View {
 
         int xA = (arrowBlock.get(pos)).getX();//xArrow;
         int yA = arrowBlock.get(pos).getY() + 2;
+        String face = arrowBlock.get(pos).getFace();
         Matrix matrix = new Matrix();
 
-        matrix.postRotate(180);
+        switch(face){
+            case "L": matrix.postRotate(270);break;
+            case "R": matrix.postRotate(90);break;
+            case "U": break;
+            case "D": matrix.postRotate(180);break;
+        }
+
 
         int WAYPOINT_PADDING = CELLSIZE;
 

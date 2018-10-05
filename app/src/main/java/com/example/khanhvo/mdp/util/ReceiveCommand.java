@@ -33,6 +33,7 @@ public class ReceiveCommand {
     private int yCoor = 0;
     private int xA = 0;
     private int yA = 0;
+    private String face = "D";
     private Direction dir = NORTH;
     private String status = Constant.EMPTY_STRING;
 
@@ -94,9 +95,19 @@ public class ReceiveCommand {
             if (map.get("yA")!=null){
                 yA = 17 - Integer.valueOf(map.get("yA"));//scanner.nextInt();
             }
+            if (map.get("dirA")!=null){
+                face = map.get("dirA");//scanner.nextInt();
+            }
             if (map.get("dir")!= null){
                 //dir = Direction.getEnum(Integer.valueOf(map.get("dir")));//Direction.getEnum(scanner.nextInt());
-                dir = Direction.getEnum(Integer.valueOf(map.get("dir").charAt(0)));//.substring(0,0)));//Direction.getEnum(scanner.nextInt());
+                //dir = Direction.getEnum(Integer.valueOf(map.get("dir").charAt(0)));//.substring(0,0)));//Direction.getEnum(scanner.nextInt());
+                Log.d(TAG, String.valueOf(dir));
+                switch(map.get("dir").charAt(0)){
+                    case '0': dir = Direction.getEnum(0); break;
+                    case '1': dir = Direction.getEnum(1); break;
+                    case '2': dir = Direction.getEnum(2); break;
+                    case '3': dir = Direction.getEnum(3); break;
+                }
             }
             if (map.get("status")!=null){
                 status = map.get("status");//scanner.nextLine().trim();
@@ -305,6 +316,10 @@ public class ReceiveCommand {
 
     public String getStatus() {
         return this.status;
+    }
+
+    public String getFace() {
+        return this.face;
     }
 
 //    public void merge(ReceiveCommand rc) {

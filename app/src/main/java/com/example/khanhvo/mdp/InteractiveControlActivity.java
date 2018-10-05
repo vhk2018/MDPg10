@@ -1,7 +1,6 @@
 package com.example.khanhvo.mdp;
 
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,21 +11,16 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -36,7 +30,6 @@ import android.widget.Toast;
 
 import com.example.khanhvo.mdp.behaviour.ResetDialogWrapper;
 import com.example.khanhvo.mdp.behaviour.ToastWrapper;
-//import com.example.khanhvo.mdp.dialog.ResetDialogFragment;
 import com.example.khanhvo.mdp.enumType.CellStatus;
 import com.example.khanhvo.mdp.enumType.Command;
 import com.example.khanhvo.mdp.enumType.Direction;
@@ -46,13 +39,12 @@ import com.example.khanhvo.mdp.util.Constant;
 import com.example.khanhvo.mdp.util.ReceiveCommand;
 import com.example.khanhvo.mdp.util.RemoteController;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import me.aflak.bluetooth.Bluetooth;
+
+//import com.example.khanhvo.mdp.dialog.ResetDialogFragment;
 
 public class InteractiveControlActivity extends AppCompatActivity implements ToastWrapper, ResetDialogWrapper, SensorEventListener, Bluetooth.CommunicationCallback {
 
@@ -78,6 +70,12 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     private SensorManager sensorManager;
     private Sensor sensor;
     long lastUpdate;
+
+    //NEW
+    Button btn_StopChronometer;
+    private Chronometer chronometer;
+    private long pauseOffset;
+    private boolean running;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +119,24 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         rc = new RemoteController(this);
         mazeView = new MazeView(this, y, x, Constant.MAZE_PADDED, rc);
         cBaseApplication.mazeView = mazeView;
+
+        //NEW
+        btn_StopChronometer = (Button)findViewById(R.id.btn_StopChronometer);
+        chronometer = findViewById(R.id.chronometer);
+        chronometer.setFormat("Time: %s");
+        chronometer.setBase(SystemClock.elapsedRealtime());
+
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                /*if ((SystemClock.elapsedRealtime() - chronometer.getBase()) >= 10000) {
+                    chronometer.setBase(SystemClock.elapsedRealtime());
+                    Toast.makeText(MainActivity.this, "Bing!", Toast.LENGTH_SHORT).show();
+                }
+                */
+            }
+        });
+
         /*mazeView.setOnTouchListener(new OnSwipeListener(InteractiveControlActivity.this) {
 
             public void onSwipeUp() {
@@ -181,6 +197,9 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             public void onClick(View view) {
                 //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
                 cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX()+1)+"},{"+(mazeView.robot.getY()+1)+"}").getBytes(Charset.defaultCharset()));
+
+                //NEW
+                startChronometer(chronometer);
             }
         });
 
@@ -189,6 +208,9 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             public void onClick(View view) {
                 //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
                 cBaseApplication.mBluetoothChat.write(("Pfps").getBytes(Charset.defaultCharset()));
+
+                //NEW
+                startChronometer(chronometer);
             }
         });
 
@@ -237,6 +259,21 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             }
         });
 
+        //NEW
+        btn_StopChronometer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (running){
+                    pauseChronometer(chronometer);
+                    btn_StopChronometer.setText("Reset");
+                }
+                else {
+                    resetChronometer(chronometer);
+                    btn_StopChronometer.setText("Stop");
+                }
+            }
+        });
+
         /*b.enableBluetooth();
 
         b.setCommunicationCallback(this);
@@ -248,6 +285,29 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         b.connectToDevice(b.getPairedDevices().get(pos));*/
 
     }
+
+    //NEW
+    public void startChronometer(View v) {
+        if (!running) {
+            chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+            chronometer.start();
+            running = true;
+        }
+    }
+
+    public void pauseChronometer(View v) {
+        if (running) {
+            chronometer.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+            running = false;
+        }
+    }
+
+    public void resetChronometer(View v) {
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        pauseOffset = 0;
+    }
+
 /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -357,6 +417,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         int y = receiveCommand.getY();
         int xA = receiveCommand.getXA();
         int yA = receiveCommand.getYA();
+        String face = receiveCommand.getFace();
         Log.d(TAG, "*************"+String.valueOf(xA));
         Direction dir = receiveCommand.getDir();
 //        HashSet obstacles = receiveCommand.getObstacles();
@@ -371,8 +432,8 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
 
 
         Log.d("TAG","INDEX="+index);
-        if (xA!=0 && yA!=0 && index <30){
-            mazeView.setArrow(mazeView.arrowBlock.get(index),xA,yA);
+        if ((xA!=0 || yA!=0) && index <30){
+            mazeView.setArrow(mazeView.arrowBlock.get(index),xA,yA,face);
             index++;
         } else {
             mazeView.setCoordinate(x-1, y-1, dir);

@@ -15,6 +15,7 @@ public class ArrowBlock {
     private final String TAG = "ArrowBlock: ";
     private int x;// = 7;
     private int y;// = 10;
+    private String face;
 
     public ArrowBlock() {
         this.rc = rc;
@@ -28,8 +29,13 @@ public class ArrowBlock {
         return this.y;
     }
 
-    public void set(int x, int y) {
+    public String getFace() {
+        return this.face;
+    }
+
+    public void set(int x, int y, String face) {
         this.x = x;
         this.y = y;
+        this.face = face;
     }
 }
