@@ -32,8 +32,8 @@ import java.util.List;
 
 public class MazeView extends View {
 
-    private static final int UNEXPLORED_ZONE = Color.WHITE;
-    private static final int FREE_ZONE = Color.GREEN;
+    private static final int UNEXPLORED_ZONE = Color.GRAY;
+    private static final int FREE_ZONE = Color.WHITE;
     private static final int START_ZONE = Color.YELLOW;
     private static final int GOAL_ZONE = Color.RED;
     private static final int OBSTACLE_ZONE = Color.BLACK;

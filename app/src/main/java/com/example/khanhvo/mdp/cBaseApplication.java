@@ -18,6 +18,8 @@ public class cBaseApplication extends Application {
     public static Robot robot;
     public static String incomingMessage;
     public static String gridValue = "000000000000000000000000000000000000000000000000000000000000000000000000000";
+    public static String mdf1 = "000000000000000000000000000000000000000000000000000000000000000000000000000";
+    public static String arrowString = "";
     public static String mazeGrid;
 
     @Override

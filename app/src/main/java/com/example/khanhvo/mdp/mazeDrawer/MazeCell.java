@@ -21,7 +21,7 @@ public class MazeCell {
         p.setDither(true);
         p.setAntiAlias(true);
 
-        b.setColor(Color.GRAY);
+        b.setColor(Color.BLACK);
         b.setStyle(Paint.Style.STROKE);
         b.setDither(true);
         b.setAntiAlias(true);

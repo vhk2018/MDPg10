@@ -196,7 +196,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             @Override
             public void onClick(View view) {
                 //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
-                cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX()+1)+"},{"+(mazeView.robot.getY()+1)+"}").getBytes(Charset.defaultCharset()));
+                cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX())+"},{"+(mazeView.robot.getY())+"}").getBytes(Charset.defaultCharset()));
 
                 //NEW
                 startChronometer(chronometer);
@@ -434,9 +434,10 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         Log.d("TAG","INDEX="+index);
         if ((xA!=0 || yA!=0) && index <30){
             mazeView.setArrow(mazeView.arrowBlock.get(index),xA,yA,face);
+            cBaseApplication.arrowString += "("+xA+","+yA+")     ";
             index++;
         } else {
-            mazeView.setCoordinate(x-1, y-1, dir);
+            mazeView.setCoordinate(x-1, y+1, dir);
 //      mazeView.addObstacles(obstacles);
             mazeView.setGrid(grid);
         }
@@ -448,55 +449,11 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
     }
 
     public void moveForward(View view) {
-        mazeView.moveByButton(Command.MOVE_FORWARD);
-        /*b = new Bluetooth(this);
-        mBluetoothService = BluetoothService.getInstance(getApplicationContext());
-        b.enableBluetooth();
-
-        b.setCommunicationCallback(this);
-        int pos = getIntent().getExtras().getInt("pos");
-        name = b.getPairedDevices().get(pos).getName();
-
-        b.connectToDevice(b.getPairedDevices().get(pos));*/
-        //b = new Bluetooth(this);
-        //((cBaseApplication)this.getApplicationContext()).myBlueTooth.send("f");
-        /*if (((cBaseApplication)this.getApplicationContext()).myBlueTooth.isConnected()) {
-            if (Constant.LOG) {
-                Log.d(TAG, "connected");
-            }
-        } else {
-            if (Constant.LOG) {
-                Log.d(TAG, "not connected");
-            }
-        }
-        //b.getDevice();
-        //b.getSocket();
-        if(mBluetoothService.getReconnectionState())
-            mBluetoothService.reconnect();
-        if (Constant.LOG) {
-            Log.d(TAG, String.valueOf(mBluetoothService.getState()));
-            Log.d(TAG, String.valueOf(mBluetoothService.getConnectedDevice()));
-            Log.d(TAG, String.valueOf(pos));
-            Log.d(TAG, String.valueOf(b.getPairedDevices()));
-            Log.d(TAG, String.valueOf(b.getSocket()));
-            Log.d(TAG, String.valueOf(b.getDevice()));
-        }
-
-        b.connectToDevice(b.getDevice());
-        if (b.isConnected()) {
-            if (Constant.LOG) {
-                Log.d(TAG, "connected to " + mBluetoothService.getConnectedDevice().getName());
-            }
-        } else {
-            if (Constant.LOG) {
-                Log.d(TAG, "not connected1");
-            }
-        }*/
-
-        //mBluetoothChat.write(bytes);
-        ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("f".toString().getBytes(Charset.defaultCharset()));
-
-        //b.send("f");
+        //mazeView.moveByButton(Command.MOVE_FORWARD);
+        //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("f".toString().getBytes(Charset.defaultCharset()));
+        MDFString mdfString = new MDFString();
+        mdfString.setMDF();
+        mdfString.show(getSupportFragmentManager(),"show_mdf");
     }
 
     public void turnLeft(View view) {

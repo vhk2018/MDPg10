@@ -80,8 +80,10 @@ public class ReceiveCommand {
             } else {
 
             }
-            if (map.get("mdf2")!= null){
-                mdf2 = map.get("mdf2");//scanner.next();
+            if (map.get("mdf")!= null){
+                cBaseApplication.mdf1 = map.get("mdf");
+                Log.d(TAG,cBaseApplication.mdf1);
+                //mdf2 = map.get("mdf");//scanner.next();
             }
             if (map.get("x") != null){
                 xCoor = Integer.valueOf(map.get("x"));//scanner.nextInt();
@@ -231,11 +233,13 @@ public class ReceiveCommand {
             grid[i] = new CellStatus[Constant.WIDTH];
         }
         char[] tempGrid = hexToBin(cBaseApplication.gridValue ).toCharArray();
+        char[] tempExploreGrid = hexToBin(cBaseApplication.mdf1 ).toCharArray();
         //char[] tempGrid = hexToBin("800100020007000000000000000000000000000000000000000000000000000000000000000").toCharArray();
         Log.d(TAG, String.valueOf(tempGrid));
         Log.d(TAG, String.valueOf(tempGrid.length));
         //grid[4][4]=CellStatus.OBSTACLE;
         char[][] realGrid = new char[Constant.HEIGHT][Constant.WIDTH];
+        char[][] realExploreGrid = new char[Constant.HEIGHT][Constant.WIDTH];
         int index = 0;
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j <15 ; j++) {
@@ -244,13 +248,25 @@ public class ReceiveCommand {
                 index++;
             }
         }
+        index = 0;
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j <15 ; j++) {
+                realExploreGrid[i][j] = tempExploreGrid[index];
+                //Log.d(TAG, String.valueOf(index));
+                index++;
+            }
+        }
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 15; j++) {
                 //Log.d("grid", String.valueOf(realGrid[i][j]));
-                if (realGrid[i][j] == '1'){
-                    grid[19-i][j]=CellStatus.OBSTACLE;
-                } else {
+                if (realExploreGrid[i][j] == '0'){
                     grid[19-i][j]=CellStatus.UNEXPLORED;
+                } else {
+                    if (realGrid[i][j] == '1') {
+                        grid[19 - i][j] = CellStatus.OBSTACLE;
+                    } else {
+                        grid[19 - i][j] = CellStatus.FREE;
+                    }
                 }
             }
         }
