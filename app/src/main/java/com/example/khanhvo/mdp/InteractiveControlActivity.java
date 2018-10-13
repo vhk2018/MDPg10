@@ -196,7 +196,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             @Override
             public void onClick(View view) {
                 //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
-                cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX())+"},{"+(mazeView.robot.getY())+"}").getBytes(Charset.defaultCharset()));
+                cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX()+1)+"},{"+(mazeView.robot.getY()+1)+"}").getBytes(Charset.defaultCharset()));
 
                 //NEW
                 startChronometer(chronometer);
@@ -217,7 +217,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         calibration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Ar".toString().getBytes(Charset.defaultCharset()));
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Au".toString().getBytes(Charset.defaultCharset()));
 
             }
         });
@@ -225,7 +225,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         btn_L.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Am".toString().getBytes(Charset.defaultCharset()));
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
 
             }
         });
@@ -233,7 +233,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         btn_R.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("An".toString().getBytes(Charset.defaultCharset()));
+                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
 
             }
         });
