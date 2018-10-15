@@ -233,10 +233,11 @@ public class ReceiveCommand {
             grid[i] = new CellStatus[Constant.WIDTH];
         }
         char[] tempGrid = hexToBin(cBaseApplication.gridValue ).toCharArray();
+        Log.d(TAG,hexToBin(cBaseApplication.mdf1));
         char[] tempExploreGrid = hexToBin(cBaseApplication.mdf1 ).toCharArray();
         //char[] tempGrid = hexToBin("800100020007000000000000000000000000000000000000000000000000000000000000000").toCharArray();
         Log.d(TAG, String.valueOf(tempGrid));
-        Log.d(TAG, String.valueOf(tempGrid.length));
+        Log.d(TAG, "-----------"+String.valueOf(tempExploreGrid.length));
         //grid[4][4]=CellStatus.OBSTACLE;
         char[][] realGrid = new char[Constant.HEIGHT][Constant.WIDTH];
         char[][] realExploreGrid = new char[Constant.HEIGHT][Constant.WIDTH];
@@ -248,7 +249,7 @@ public class ReceiveCommand {
                 index++;
             }
         }
-        index = 0;
+        index = 2;
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j <15 ; j++) {
                 realExploreGrid[i][j] = tempExploreGrid[index];
@@ -260,12 +261,16 @@ public class ReceiveCommand {
             for (int j = 0; j < 15; j++) {
                 //Log.d("grid", String.valueOf(realGrid[i][j]));
                 if (realExploreGrid[i][j] == '0'){
-                    grid[19-i][j]=CellStatus.UNEXPLORED;
+                    grid[i][j]=CellStatus.UNEXPLORED;
+                    //grid[19-i][j]=CellStatus.UNEXPLORED;
+                    //grid[j][19-i]=CellStatus.UNEXPLORED;
                 } else {
                     if (realGrid[i][j] == '1') {
-                        grid[19 - i][j] = CellStatus.OBSTACLE;
+                        grid[i][j] = CellStatus.OBSTACLE;
+                        //grid[19 - i][j] = CellStatus.OBSTACLE;
                     } else {
-                        grid[19 - i][j] = CellStatus.FREE;
+                        grid[i][j] = CellStatus.FREE;
+                        //grid[19 - i][j] = CellStatus.FREE;
                     }
                 }
             }
