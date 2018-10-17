@@ -199,6 +199,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
                 cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX()+1)+"},{"+(mazeView.robot.getY()+1)+"}").getBytes(Charset.defaultCharset()));
 
                 //NEW
+                resetChronometer(chronometer);
                 startChronometer(chronometer);
             }
         });
@@ -210,6 +211,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
                 cBaseApplication.mBluetoothChat.write(("Pfps").getBytes(Charset.defaultCharset()));
 
                 //NEW
+                resetChronometer(chronometer);
                 startChronometer(chronometer);
             }
         });
@@ -292,6 +294,10 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
             running = true;
+        } else {
+            chronometer.stop();
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
         }
     }
 
