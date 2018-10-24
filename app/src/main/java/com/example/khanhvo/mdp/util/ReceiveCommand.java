@@ -95,7 +95,7 @@ public class ReceiveCommand {
                 xA = Integer.valueOf(map.get("xA"));//scanner.nextInt();
             }
             if (map.get("yA")!=null){
-                yA = 17 - Integer.valueOf(map.get("yA"));//scanner.nextInt();
+                yA = Integer.valueOf(map.get("yA"));//scanner.nextInt();
             }
             if (map.get("dirA")!=null){
                 face = map.get("dirA");//scanner.nextInt();

@@ -195,31 +195,45 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         explore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
-                cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX()+1)+"},{"+(mazeView.robot.getY()+1)+"}").getBytes(Charset.defaultCharset()));
+                try {
+                    //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
+                    cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX()+1)+"},{"+(mazeView.robot.getY()+1)+"}").getBytes(Charset.defaultCharset()));
 
-                //NEW
-                resetChronometer(chronometer);
-                startChronometer(chronometer);
+                    //NEW
+                    resetChronometer(chronometer);
+                    startChronometer(chronometer);
+                } catch (NullPointerException e){
+                    sendToast("NO CONNECTION");
+                }
+
             }
         });
 
         run.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
-                cBaseApplication.mBluetoothChat.write(("Pfps").getBytes(Charset.defaultCharset()));
+                try {
+                    //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
+                    cBaseApplication.mBluetoothChat.write(("Pfps").getBytes(Charset.defaultCharset()));
 
-                //NEW
-                resetChronometer(chronometer);
-                startChronometer(chronometer);
+                    //NEW
+                    resetChronometer(chronometer);
+                    startChronometer(chronometer);
+                } catch (NullPointerException e){
+                    sendToast("NO CONNECTION");
+                }
             }
         });
 
         calibration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Au".toString().getBytes(Charset.defaultCharset()));
+                try {
+                    ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Au".toString().getBytes(Charset.defaultCharset()));
+
+                } catch (NullPointerException e){
+                    sendToast("NO CONNECTION");
+                }
 
             }
         });
@@ -227,7 +241,12 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         btn_L.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
+                try {
+                    ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
+
+                } catch (NullPointerException e){
+                    sendToast("NO CONNECTION");
+                }
 
             }
         });
@@ -235,8 +254,12 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         btn_R.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
+                try {
+                    ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Aw".toString().getBytes(Charset.defaultCharset()));
 
+                } catch (NullPointerException e){
+                    sendToast("NO CONNECTION");
+                }
             }
         });
 
@@ -244,7 +267,11 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     refresh.setVisibility(View.GONE);
-                    ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("sendArena".toString().getBytes(Charset.defaultCharset()));
+                    try {
+                        ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("sendArena".toString().getBytes(Charset.defaultCharset()));
+                    } catch (NullPointerException e){
+                        sendToast("NO CONNECTION");
+                    }
                 } else {
                     // The toggle is disabled
                     refresh.setVisibility(View.VISIBLE);
@@ -267,11 +294,11 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             public void onClick(View view) {
                 if (running){
                     pauseChronometer(chronometer);
-                    btn_StopChronometer.setText("Reset");
+                    //btn_StopChronometer.setText("Reset");
                 }
                 else {
-                    resetChronometer(chronometer);
-                    btn_StopChronometer.setText("Stop");
+                    //resetChronometer(chronometer);
+                    //btn_StopChronometer.setText("Stop");
                 }
             }
         });
@@ -439,9 +466,11 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
 
         Log.d("TAG","INDEX="+index);
         if ((xA!=0 || yA!=0) && index <30){
-            mazeView.setArrow(mazeView.arrowBlock.get(index),xA,yA,face);
-            cBaseApplication.arrowString += "("+xA+","+yA+")     ";
-            index++;
+            if (cBaseApplication.gridValue.charAt(xA*15+yA) == '1'){
+                mazeView.setArrow(mazeView.arrowBlock.get(index), xA, yA, face);
+                cBaseApplication.arrowString += "(" + xA + "," + yA + "," + face + ")     ";
+                index++;
+            }
         } else {
             mazeView.setCoordinate(x-1, y+1, dir);
 //      mazeView.addObstacles(obstacles);
@@ -464,13 +493,21 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
 
     public void turnLeft(View view) {
         mazeView.moveByButton(Command.TURN_LEFT);
-        ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tl".toString().getBytes(Charset.defaultCharset()));
+        try {
+            ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tl".toString().getBytes(Charset.defaultCharset()));
+        } catch (NullPointerException e){
+            sendToast("NO CONNECTION");
+        }
 
     }
 
     public void turnRight(View view) {
         mazeView.moveByButton(Command.TURN_RIGHT);
-        ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tr".toString().getBytes(Charset.defaultCharset()));
+        try {
+            ((cBaseApplication)getApplicationContext()).mBluetoothChat.write("tr".toString().getBytes(Charset.defaultCharset()));
+        } catch (NullPointerException e){
+            sendToast("NO CONNECTION");
+        }
 
     }
 
