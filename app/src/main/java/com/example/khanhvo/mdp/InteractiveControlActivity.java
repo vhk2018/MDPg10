@@ -40,6 +40,7 @@ import com.example.khanhvo.mdp.util.ReceiveCommand;
 import com.example.khanhvo.mdp.util.RemoteController;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.aflak.bluetooth.Bluetooth;
@@ -120,6 +121,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         mazeView = new MazeView(this, y, x, Constant.MAZE_PADDED, rc);
         cBaseApplication.mazeView = mazeView;
 
+
         //NEW
         btn_StopChronometer = (Button)findViewById(R.id.btn_StopChronometer);
         chronometer = findViewById(R.id.chronometer);
@@ -196,6 +198,8 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
             @Override
             public void onClick(View view) {
                 try {
+                    cBaseApplication.arrowString = "";
+                    cBaseApplication.arrowArray = new ArrayList<String>();
                     //((cBaseApplication)getApplicationContext()).mBluetoothChat.write("Av".toString().getBytes(Charset.defaultCharset()));
                     cBaseApplication.mBluetoothChat.write(("Pexs{"+(mazeView.robot.getX()+1)+"},{"+(mazeView.robot.getY()+1)+"}").getBytes(Charset.defaultCharset()));
 
@@ -450,7 +454,7 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
         int y = receiveCommand.getY();
         int xA = receiveCommand.getXA();
         int yA = receiveCommand.getYA();
-        String face = receiveCommand.getFace();
+        String face = receiveCommand.getFace().replace("\"","");
         Log.d(TAG, "*************"+String.valueOf(xA));
         Direction dir = receiveCommand.getDir();
 //        HashSet obstacles = receiveCommand.getObstacles();
@@ -465,10 +469,17 @@ public class InteractiveControlActivity extends AppCompatActivity implements Toa
 
 
         Log.d("TAG","INDEX="+index);
-        if ((xA!=0 || yA!=0) && index <30){
-            if (cBaseApplication.gridValue.charAt(xA*15+yA) == '1'){
-                mazeView.setArrow(mazeView.arrowBlock.get(index), xA, yA, face);
-                cBaseApplication.arrowString += "(" + xA + "," + yA + "," + face + ")     ";
+        if ((xA!=0 || yA!=0) && index <50){
+            Log.d(TAG, "~~~~~~"+String.valueOf(yA)+"~~"+String.valueOf((yA*15+xA) + "~~~~~~"+String.valueOf(cBaseApplication.binaryGrid.charAt(yA*15+xA -1)) +cBaseApplication.binaryGrid.charAt(yA*15+xA) + cBaseApplication.binaryGrid.charAt(yA*15+xA+1)));
+            if (cBaseApplication.binaryGrid.charAt(yA*15+xA) == '1'){
+                Log.d(TAG,"&&&&&" + face);
+                //mazeView.setArrow(mazeView.arrowBlock.get(index), 5, 3+2, "U");
+                mazeView.setArrow(mazeView.arrowBlock.get(index), xA, 19-yA-2, face);
+                //cBaseApplication.arrowString += "(" + xA + "," + yA + "," + face + ")     ";
+                if (!cBaseApplication.arrowArray.contains("(" + xA + "," + yA + "," + face + ")")){
+                    cBaseApplication.arrowArray.add("(" + xA + "," + yA + "," + face + ")");
+                    cBaseApplication.arrowString += "(" + xA + "," + yA + "," + face + ")     ";
+                }
                 index++;
             }
         } else {

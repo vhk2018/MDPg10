@@ -95,7 +95,7 @@ public class ReceiveCommand {
                 xA = Integer.valueOf(map.get("xA"));//scanner.nextInt();
             }
             if (map.get("yA")!=null){
-                yA = Integer.valueOf(map.get("yA"));//scanner.nextInt();
+                yA = 19 - Integer.valueOf(map.get("yA"));//scanner.nextInt();
             }
             if (map.get("dirA")!=null){
                 face = map.get("dirA");//scanner.nextInt();
@@ -233,6 +233,7 @@ public class ReceiveCommand {
             grid[i] = new CellStatus[Constant.WIDTH];
         }
         char[] tempGrid = hexToBin(cBaseApplication.gridValue ).toCharArray();
+        cBaseApplication.binaryGrid = hexToBin(cBaseApplication.gridValue);
         Log.d(TAG,hexToBin(cBaseApplication.mdf1));
         char[] tempExploreGrid = hexToBin(cBaseApplication.mdf1 ).toCharArray();
         //char[] tempGrid = hexToBin("800100020007000000000000000000000000000000000000000000000000000000000000000").toCharArray();
